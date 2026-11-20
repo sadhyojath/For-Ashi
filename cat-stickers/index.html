@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f3e8dc">
+<title>A little something for Ms.Injuuu</title>
+<style>
+  :root{
+    --paper:#fbf5ed; --cream:#f3e8dc; --sand:#e7d3c0; --tan:#c7a98f;
+    --brown:#60483b; --deep:#49352d; --pink:#d7a4a3; --rose:#b9787b;
+    --ink:#59483f; --muted:#8a7467; --white:#fffaf5;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; min-height:100vh; color:var(--ink);
+    font-family:Georgia,"Times New Roman",serif;
+    background:
+      radial-gradient(ellipse at 12% 15%,rgba(255,255,255,.85),transparent 34%),
+      radial-gradient(ellipse at 88% 80%,rgba(215,164,163,.18),transparent 32%),
+      linear-gradient(135deg,#f7eee5,#ead9ca 55%,#f5e9df);
+    overflow-x:hidden;
+  }
+  button{font:inherit}
+  .grain{position:fixed;inset:0;pointer-events:none;opacity:.13;z-index:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E")}
+  .screen{position:relative;z-index:1;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:36px 18px}
+  .intro{width:min(720px,100%);text-align:center}
+  .eyebrow{font:600 11px/1.4 Arial,sans-serif;letter-spacing:.24em;text-transform:uppercase;color:var(--rose)}
+  h1{font-size:clamp(34px,6vw,58px);font-weight:400;line-height:1.05;margin:14px 0 10px;color:var(--deep)}
+  .subtitle{font-size:16px;line-height:1.7;color:var(--muted);margin:0 auto 28px;max-width:430px}
+  .envelope-stage{height:300px;display:grid;place-items:center;perspective:1000px;margin:10px auto 18px}
+  .envelope-wrap{position:relative;width:min(390px,84vw);height:240px;cursor:pointer;filter:drop-shadow(0 18px 22px rgba(83,56,43,.18));transition:transform .35s}
+  .envelope-wrap:hover{transform:translateY(-5px) rotate(-.5deg)}
+  .envelope{position:absolute;inset:34px 0 0;background:#d9bca7;border-radius:7px;overflow:visible}
+  .envelope:before{content:"";position:absolute;inset:0;background:linear-gradient(145deg,#e6cdbb,#cba990);clip-path:polygon(0 0,50% 55%,100% 0,100% 100%,0 100%);z-index:3;border-radius:0 0 7px 7px}
+  .envelope:after{content:"";position:absolute;inset:0;background:linear-gradient(35deg,#c8a28b,#e7cdb8);clip-path:polygon(0 0,50% 57%,100% 0);z-index:4;transform-origin:top;transition:transform .85s cubic-bezier(.2,.7,.2,1)}
+  .letter-peek{position:absolute;left:7%;right:7%;top:3px;height:185px;background:var(--paper);border:1px solid #ead9c9;border-radius:4px;z-index:2;transition:transform .9s cubic-bezier(.2,.7,.2,1);display:flex;align-items:center;justify-content:center;flex-direction:column;color:var(--brown)}
+  .letter-peek span:first-child{font-size:29px;margin-bottom:8px}
+  .letter-peek small{font:11px Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--rose)}
+  .flap{position:absolute;left:0;right:0;top:34px;height:125px;background:#e8d0bd;clip-path:polygon(0 0,100% 0,50% 100%);z-index:5;transform-origin:top;transition:transform .85s cubic-bezier(.2,.7,.2,1);backface-visibility:hidden}
+  .seal{position:absolute;z-index:6;left:50%;top:130px;transform:translate(-50%,-50%);width:61px;height:61px;border-radius:50%;display:grid;place-items:center;color:#f8e9df;font-size:25px;background:radial-gradient(circle at 35% 28%,#d89b9b,#a85f67 75%);box-shadow:inset 0 2px 4px #f5c6bd,0 4px 8px #93635a66;border:2px solid #dca9a2;transition:opacity .3s,transform .5s}
+  .seal:after{content:"";position:absolute;inset:5px;border:1px solid #f2c9bf;border-radius:50%;opacity:.8}
+  .envelope-wrap.open .flap,.envelope-wrap.open .envelope:after{transform:rotateX(180deg);z-index:1}
+  .envelope-wrap.open .seal{opacity:0;transform:translate(-50%,-50%) scale(.4)}
+  .envelope-wrap.open .letter-peek{transform:translateY(-125px);transition-delay:.35s}
+  .click-hint{font:12px Arial,sans-serif;letter-spacing:.08em;color:#947b6d}
+  .open-btn,.soft-btn{border:0;border-radius:999px;padding:13px 23px;background:var(--brown);color:#fff8f1;cursor:pointer;box-shadow:0 7px 16px #60483b26;transition:transform .2s,background .2s}
+  .open-btn:hover,.soft-btn:hover{transform:translateY(-2px);background:var(--deep)}
+  .hidden{display:none!important}
+  #inside{display:none;max-width:980px;width:100%;margin:0 auto;padding:55px 18px 80px;position:relative;z-index:1}
+  #inside.visible{display:block;animation:fadeUp .8s both}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+  .inside-head{text-align:center;margin-bottom:30px}
+  .inside-head h2{font-size:clamp(32px,5vw,48px);font-weight:400;margin:9px 0;color:var(--deep)}
+  .inside-head p{color:var(--muted);font-size:15px}
+  .contents{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+  .card{background:rgba(255,250,245,.78);border:1px solid rgba(166,126,102,.22);border-radius:18px;padding:23px;box-shadow:0 10px 28px rgba(87,62,47,.07);backdrop-filter:blur(6px)}
+  .card.wide{grid-column:1/-1}
+  .card-top{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+  .icon{width:43px;height:43px;border-radius:14px;background:#f0dfd5;display:grid;place-items:center;font-size:23px}
+  .card h3{font-weight:400;font-size:23px;margin:0;color:var(--deep)}
+  .card p{font-size:15px;line-height:1.75;color:#79665b;margin:8px 0}
+  .letter-text{font-size:17px!important;line-height:1.9!important;color:#624e43!important}
+  .note{font:11px Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--rose);margin-bottom:12px}
+  .message-box{background:#f6ebe3;border-radius:14px;padding:18px;margin:14px 0 4px;min-height:92px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:18px;line-height:1.6;color:#654d42}
+  .cat-face{display:flex;justify-content:center;align-items:center;margin:8px auto 4px;height:150px}
+  .cat-illustration{width:190px;height:150px;overflow:visible;filter:drop-shadow(0 5px 4px rgba(96,72,59,.12))}
+  .cat-tail{transform-origin:150px 112px;animation:tailSway 2.4s ease-in-out infinite}
+  @keyframes tailSway{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(9deg)}}
+  .cat-blink{transform-origin:center;animation:blink 4.5s infinite}
+  @keyframes blink{0%,45%,49%,100%{transform:scaleY(1)}47%{transform:scaleY(.12)}}
+  .cat-face{position:relative}
+  .cat-illustration{transition:transform .22s ease}
+  .cat-face.cat-happy .cat-illustration{animation:catHappy .55s ease}
+  @keyframes catHappy{0%,100%{transform:translateY(0) rotate(0)}25%{transform:translateY(-9px) rotate(-4deg)}55%{transform:translateY(-4px) rotate(4deg)}}
+  .cat-heart{position:absolute;left:calc(50% + 63px);top:12px;color:#c77e83;font:24px Arial,sans-serif;pointer-events:none;animation:heartPop .9s ease-out forwards}
+  @keyframes heartPop{0%{opacity:0;transform:translateY(8px) scale(.5)}25%{opacity:1;transform:translateY(-5px) scale(1.15)}100%{opacity:0;transform:translateY(-42px) scale(.85)}}
+  .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:13px}
+  .soft-btn{background:#b77f7e;padding:11px 18px;font:13px Arial,sans-serif}
+  .soft-btn.secondary{background:#e9d7ca;color:#60483b;box-shadow:none}
+  .mood-row{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin:14px 0}
+  .mood{border:1px solid #e3cfc1;background:#fff9f4;border-radius:14px;padding:10px 13px;cursor:pointer;font-size:22px;transition:.2s}
+  .mood:hover,.mood.selected{background:#f0dcd8;border-color:#c98f90;transform:translateY(-2px)}
+  .video-frame{position:relative;width:100%;aspect-ratio:16/9;border-radius:13px;overflow:hidden;background:#ead9ca}
+  .video-frame iframe{width:100%;height:100%;border:0}
+  .video-placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;background:linear-gradient(135deg,#e9d8ca,#f7eae3);text-align:center;padding:20px}
+  .video-placeholder .bigcat{font-size:58px}
+  .footer{text-align:center;margin:34px auto 0;color:#987f70;font-size:13px;line-height:1.7}
+  .tiny{font:11px Arial,sans-serif;color:#a18a7c}
+  .sprinkle{position:fixed;pointer-events:none;z-index:5;animation:fall 2.8s ease-out forwards;font-size:18px}
+  @keyframes fall{0%{opacity:0;transform:translateY(-20px) rotate(0)}15%{opacity:1}100%{opacity:0;transform:translateY(90vh) rotate(280deg)}}
+  @media(max-width:650px){.contents{grid-template-columns:1fr}.card.wide{grid-column:auto}.screen{padding:28px 15px}.envelope-stage{height:265px}.envelope-wrap{transform:scale(.9)}.envelope-wrap:hover{transform:scale(.9) translateY(-4px)}}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<section class="screen" id="cover">
+  <main class="intro">
+    <div class="eyebrow">a little care package</div>
+    <h1>For Injuu ♡</h1>
+    <p class="subtitle">A tiny something, just for you.<br>Open whenever you need a little pause.</p>
+    <div class="envelope-stage">
+      <div class="envelope-wrap" id="envelope" role="button" tabindex="0" aria-label="Open the envelope">
+        <div class="letter-peek"><span>♡</span><small>sealed with care</small></div>
+        <div class="envelope"></div>
+        <div class="flap"></div>
+        <div class="seal">♥</div>
+      </div>
+    </div>
+    <div class="click-hint" id="hint">tap the envelope to open</div>
+    <div style="margin-top:18px"><button class="open-btn" id="openBtn">Open your letter</button></div>
+  </main>
+</section>
+
+<main id="inside">
+  <header class="inside-head">
+    <div class="eyebrow">unwrapped, just for you</div>
+    <h2>A little corner of calm</h2>
+    <p>No pressure to do anything. Just take what you need. ♡</p>
+  </header>
+
+  <section class="contents">
+    <article class="card wide">
+      <div class="card-top"><div class="icon">💌</div><div><div class="note">a little note</div><h3>For you, Ashi</h3></div></div>
+      <p class="letter-text">Hey Ash, just a small reminder that you don't have to have everything figured out all at once. Whatever's going on, take it one thing at a time. You deserve rest, good things, and moments where your mind gets to be quiet. Be a little kinder to yourself, okay? You're doing the best you can, and that counts. ♡</p>
+      <p class="tiny">— someone who's rooting for you</p>
+    </article>
+
+    <article class="card">
+      <div class="card-top"><div class="icon">🐈</div><div><div class="note">important cat business</div><h3>Cat corner</h3></div></div>
+      <div class="cat-face" id="catFace" aria-label="A cute illustrated cream-coloured cat">
+        <svg class="cat-illustration" viewBox="0 0 200 155" role="img" aria-hidden="true">
+          <path class="cat-tail" d="M145 112 C177 126 184 96 166 87 C155 82 151 94 159 98" fill="none" stroke="#b98270" stroke-width="12" stroke-linecap="round"/>
+          <ellipse cx="99" cy="123" rx="48" ry="23" fill="#d9b99f"/>
+          <ellipse cx="75" cy="135" rx="17" ry="9" fill="#f5e6d8"/>
+          <ellipse cx="119" cy="135" rx="17" ry="9" fill="#f5e6d8"/>
+          <path d="M55 54 L59 14 Q61 7 68 13 L91 36 Q101 32 111 36 L134 13 Q141 7 143 16 L145 57 Q151 69 147 86 Q139 119 100 119 Q61 119 53 87 Q49 69 55 54Z" fill="#e8cdb5" stroke="#bd967c" stroke-width="2"/>
+          <path d="M64 35 L66 19 L83 39Z M116 39 L136 19 L137 36Z" fill="#cf9293"/>
+          <ellipse class="cat-blink" cx="79" cy="70" rx="5" ry="7" fill="#60483b"/>
+          <ellipse class="cat-blink" cx="120" cy="70" rx="5" ry="7" fill="#60483b"/>
+          <path d="M94 83 Q100 77 106 83 Q100 91 94 83Z" fill="#bd7f83"/>
+          <path d="M100 89 Q94 98 87 92 M100 89 Q106 98 113 92" fill="none" stroke="#79594b" stroke-width="2" stroke-linecap="round"/>
+          <path d="M65 84 L39 79 M66 91 L40 94 M135 84 L161 79 M134 91 L160 94" stroke="#a98269" stroke-width="1.8" stroke-linecap="round"/>
+          <circle cx="68" cy="85" r="7" fill="#d99c98" opacity=".55"/><circle cx="132" cy="85" r="7" fill="#d99c98" opacity=".55"/>
+          <path d="M92 113 Q100 107 108 113" fill="none" stroke="#bd967c" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <p style="text-align:center">A very small cat has arrived to supervise your break.</p>
+      <div class="actions"><button class="soft-btn" id="catBtn">Give the cat a treat</button></div>
+      <p id="catReply" style="text-align:center;min-height:26px;font-size:13px">The cat is waiting politely. Mostly.</p>
+    </article>
+
+    <article class="card">
+      <div class="card-top"><div class="icon">🌷</div><div><div class="note">one thought at a time</div><h3>A gentle reminder</h3></div></div>
+      <div class="message-box" id="reminder">You are allowed to rest without feeling guilty about it.</div>
+      <div class="actions"><button class="soft-btn" id="reminderBtn">Another reminder</button></div>
+    </article>
+
+    <article class="card">
+      <div class="card-top"><div class="icon">☁️</div><div><div class="note">little check-in</div><h3>How's today feeling?</h3></div></div>
+      <p>Pick whichever feels closest. No explanation needed.</p>
+      <div class="mood-row">
+        <button class="mood" data-mood="good" aria-label="Good">🌞</button>
+        <button class="mood" data-mood="okay" aria-label="Okay">🌷</button>
+        <button class="mood" data-mood="tired" aria-label="Tired">☁️</button>
+        <button class="mood" data-mood="rough" aria-label="Rough">🌧️</button>
+      </div>
+      <div class="message-box" id="moodReply">Your mood is yours. Every version of you is welcome here.</div>
+    </article>
+
+    <article class="card">
+      <div class="card-top"><div class="icon">🎁</div><div><div class="note">a tiny surprise</div><h3>Unnecessary cat nonsense</h3></div></div>
+      <p>Some things don't need a reason. This is one of them.</p>
+      <div class="video-frame" id="videoFrame">
+        <div class="video-placeholder" id="videoPlaceholder">
+          <div class="bigcat">🐈</div>
+          <div>There is a very important cat video waiting for you.</div>
+          <button class="soft-btn" id="playVideo">Watch the cat surprise</button>
+        </div>
+      </div>
+      <p class="tiny">The video opens in a new YouTube tab.</p>
+    </article>
+  </section>
+  <div class="footer">
+    <div style="font-size:22px;margin-bottom:7px">♡</div>
+    Take your time. Have some water. Be gentle with yourself.<br>
+    <span class="tiny">You can come back to this little corner whenever you like.</span>
+  </div>
+</main>
+
+<script>
+  const envelope = document.getElementById('envelope');
+  const openBtn = document.getElementById('openBtn');
+  const cover = document.getElementById('cover');
+  const inside = document.getElementById('inside');
+  let opened = false;
+
+  function openEnvelope(){
+    if(opened) return;
+    opened = true;
+    envelope.classList.add('open');
+    document.getElementById('hint').textContent = 'opening your little surprise...';
+    openBtn.disabled = true;
+    openBtn.textContent = 'Just a moment...';
+    sprinkle();
+    setTimeout(() => {
+      cover.style.transition = 'opacity .7s, transform .7s';
+      cover.style.opacity = '0';
+      cover.style.transform = 'translateY(-18px)';
+      setTimeout(() => {
+        cover.classList.add('hidden');
+        inside.classList.add('visible');
+        window.scrollTo({top:0,behavior:'smooth'});
+      }, 650);
+    }, 1050);
+  }
+  envelope.addEventListener('click', openEnvelope);
+  envelope.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' '){e.preventDefault();openEnvelope();} });
+  openBtn.addEventListener('click', openEnvelope);
+
+  function sprinkle(){
+    const symbols=['♡','✦','✿','♥','⋆'];
+    for(let i=0;i<24;i++){
+      const el=document.createElement('span');
+      el.className='sprinkle';
+      el.textContent=symbols[Math.floor(Math.random()*symbols.length)];
+      el.style.left=Math.random()*100+'vw';
+      el.style.top=(-10-Math.random()*20)+'px';
+      el.style.color=['#bd8583','#a98269','#d5a9a0'][i%3];
+      el.style.animationDelay=(Math.random()*.6)+'s';
+      document.body.appendChild(el);
+      setTimeout(()=>el.remove(),3500);
+    }
+  }
+
+  const reminders=[
+    'You are allowed to rest without feeling guilty about it.',
+    'One small step is still progress.',
+    "You don't have to solve everything today.",
+    'A difficult day does not mean a difficult life.',
+    'Please remember to give yourself the same kindness you give others.',
+    'It is okay to pause, breathe, and begin again.',
+    'You deserve good things, even on the days you feel unproductive.',
+    'Slow progress is still progress. Be patient with yourself.'
+  ];
+  let lastReminder=-1;
+  document.getElementById('reminderBtn').addEventListener('click',()=>{
+    let next; do{next=Math.floor(Math.random()*reminders.length)}while(next===lastReminder);
+    lastReminder=next;
+    document.getElementById('reminder').textContent=reminders[next];
+  });
+
+  const catLines=[
+    'The cat has accepted your offering. You are now besties.',
+    'Prrrr. The cat says you deserve a little break.',
+    'The treat has vanished. The cat denies everything.',
+    'A tiny headbutt of encouragement. ฅ^•ﻌ•^ฅ',
+    'The cat is proud of you. The cat is also sleepy.'
+  ];
+  document.getElementById('catBtn').addEventListener('click',()=>{
+    const catFace = document.getElementById('catFace');
+    const catReply = document.getElementById('catReply');
+
+    // Keep the SVG illustration intact; animate the existing cat instead of
+    // replacing it with Unicode characters (which can render inconsistently).
+    catReply.textContent = catLines[Math.floor(Math.random()*catLines.length)];
+    catFace.classList.remove('cat-happy');
+    void catFace.offsetWidth; // restart the animation on every click
+    catFace.classList.add('cat-happy');
+
+    // A tiny heart pops up beside the cat as its treat reaction.
+    const heart = document.createElement('span');
+    heart.className = 'cat-heart';
+    heart.textContent = '♥';
+    catFace.appendChild(heart);
+    heart.addEventListener('animationend', () => heart.remove(), {once:true});
+  });
+
+  const moodMessages={
+    good:'A sunny day! Hope you get to enjoy a little bit of it. 🌞',
+    okay:"Okay is okay. You don't need to feel amazing every day. 🌷",
+    tired:'Please take a breather if you can. You deserve some rest. ☁️',
+    rough:"I'm sorry it's a rough one. One moment at a time; you don't have to figure it all out right now. ♡"
+  };
+  document.querySelectorAll('.mood').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('.mood').forEach(b=>b.classList.remove('selected'));
+      btn.classList.add('selected');
+      document.getElementById('moodReply').textContent=moodMessages[btn.dataset.mood];
+    });
+  });
+
+  document.getElementById('playVideo').addEventListener('click',()=>{
+    window.open('https://www.youtube.com/watch?v=IxX_QHay02M', '_blank', 'noopener,noreferrer');
+  });
+</script>
+</body>
+</html>
